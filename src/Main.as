@@ -62,9 +62,31 @@ package {
 				var button:MyButton = new MyButton(_buttons[i][0], _buttons[i][1], _buttons[i][2], _buttons[i][3], _buttons[i][4], _buttons[i][5]);
 				
 				addChild(button);
-				button.addEventListener(MouseEvent.CLICK, _buttons[i][5]);
-				_output.addEventListener(TextEvent.TEXT_INPUT)
+				button.addEventListener(MouseEvent.CLICK, _buttons[i][5]);				
 			}
+		}
+		
+		public function checkRange():void {
+			var ind:int = _output.text.indexOf (".");
+			var sign:int = _output.text.indexOf ("-");	
+				if ( ind > -1 ) {
+					var decimal:String = _output.text.substring (ind+1);
+					if (decimal.indexOf (".") > -1) {
+						_actions[_actions.length - 1] =_output.text = _output.text.substring (0, ind + 1 + decimal.indexOf("."));
+					}
+					if (decimal.length > 2) {
+						_actions[_actions.length - 1] =_output.text = _output.text.substring (0, ind + 3);
+					}
+				}else if (ind == -1 && sign == -1){
+					_actions[_actions.length - 1] =_output.text = _output.text.substring (0, 4); 
+				}
+				
+		}
+		public function truncate (_output:String):void {
+			if (Number(_output) >= 10000 || Number(_output) <= -10000 ){
+				//undo(e:MouseEvent);
+			}
+				
 		}
 		
 		public function digit(e:MouseEvent):void {
@@ -74,6 +96,7 @@ package {
 			if (value != ".") number = (number == "0") ? value : number + value;
 			else if (number.indexOf(".") == -1) number += ".";
 			_output.text = _actions[_actions.length - 1] = number;
+			checkRange();
 		}
 		
 		public function operation(e:MouseEvent):void {
