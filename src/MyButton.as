@@ -15,7 +15,8 @@ package
 		public var _button:Sprite = new Sprite();
 		public var _label:TextField = new TextField();
 		
-		public function MyButton($label:String, $x:Number, $y:Number, $width:Number, $height:Number, $type:String) {
+		public function MyButton($label:String, $x:Number, $y:Number, $width:Number, $height:Number, $type:String) 
+		{
 			_button.graphics.lineStyle(1);
 			//just for fun, lets make it looks better
 			if ($label.indexOf("C") > -1) _button.graphics.beginFill(0xDF7401); 
