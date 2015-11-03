@@ -49,7 +49,7 @@ package {
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			_output.x = 5; _output.y = 5;
-			_output.width = 220; _output.height = 28;
+			_output.width = 215; _output.height = 28;
 			_output.border = true;
 			_output.selectable = false;
 			_output.defaultTextFormat = new TextFormat("_sans", 20, 0xffffff, true, null, null, null, null, "right");
@@ -127,14 +127,14 @@ package {
 			}
 			if (value <= -10000 || value >= 10000) {
 				_actions = ["0"];	
-				_output.text = "Number is out of range";  				
+				_output.text = "Error";  				
 			} else if (!isNaN(value) && isFinite(value)) {
 				_actions = ["0"]; 
 				_output.text = String(Number(value.toFixed(2)));				
 			} else {
 				
 				_actions = ["0"];
-				_output.text = "Error";  
+				_output.text = "WoW what is that?";  
 									
 			}
 		}
