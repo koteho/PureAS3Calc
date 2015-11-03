@@ -1,36 +1,46 @@
 package {
 	
+	/**
+	 * ...
+	 * @author Pavlo K
+	 */
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.events.TextEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import MyButton;
 	
 	
-	[SWF(backgroundColor = "#ffffff", width = 240, height = 230)]
+	[SWF(backgroundColor = "0x222222", width = 230, height = 240)]
 	
 	public class Main extends Sprite {
 		
 		public var _output:TextField = new TextField();
 		public var _actions:Array = ["0"];
 		public var _buttons:Array = [
-										["1", 5, 130, 40, 40, digit],
-										["2", 50, 130, 40, 40, digit],
-										["3", 95, 130, 40, 40, digit],
-										["4", 5, 85, 40, 40, digit],
-										["5", 50, 85, 40, 40, digit],
-										["6", 95, 85, 40, 40, digit],
-										["7", 5, 40, 40, 40, digit],
-										["8", 50, 40, 40, 40, digit],
-										["9", 95, 40, 40, 40, digit],
-										["0", 5, 175, 85, 40, digit],
-										[".", 95, 175, 40, 40, digit],
-										["+", 140, 40, 40, 40, operation],
-										["-", 140, 85, 40, 40, operation],
-										["*", 140, 130, 40, 40, operation],
-										["/", 140, 175, 40, 40, operation],
-										["C", 185, 40, 40, 85, clear],
-										["=", 185, 130, 40, 85, result]
+										//value, x, y, width, height, type
+										["C", 5, 50, 50, 30, clear],
+										["←", 60, 50, 50, 30, undo],
+										["±", 115, 50, 50, 30, flip],
+										["/", 170, 50, 50, 30, operation],
+										["7", 5, 85, 50, 30, digit],
+										["8", 60, 85, 50, 30, digit],
+										["9", 115, 85, 50, 30, digit],
+										["*", 170, 85, 50, 30, operation],
+										["4", 5, 120, 50, 30, digit],
+										["5", 60, 120, 50, 30, digit],
+										["6", 115, 120, 50, 30, digit],
+										["-", 170, 120, 50, 30, operation],										
+										["1", 5, 155, 50, 30, digit],
+										["2", 60, 155, 50, 30, digit],
+										["3", 115, 155, 50, 30, digit],
+										["+", 170, 155, 50, 30, operation],
+										["0", 5, 190, 50, 30, digit],
+										[".", 60, 190, 50, 30, digit],
+										["=", 115, 190, 105, 30, result]										
 									];
 		
 		public function Main() {stage ? init() : addEventListener(Event.ADDED_TO_STAGE, init);}
@@ -38,18 +48,22 @@ package {
 		public function init(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			_output.x = 5; _output.y = 5;
-			_output.width = 220; _output.height = 30;
+			_output.width = 220; _output.height = 28;
 			_output.border = true;
 			_output.selectable = false;
-			_output.defaultTextFormat = new TextFormat("_sans", 20, 0x000000, true, null, null, null, null, "right");
+			_output.defaultTextFormat = new TextFormat("_sans", 20, 0xffffff, true, null, null, null, null, "right");
+			// bg colour is not working =( 
+			_output.backgroundColor = 0x111111;
 			_output.text = "0";
 			addChild(_output);
 			
 			var i:int = _buttons.length;
 			while (i--) {
-				var button:MyButton = new MyButton(_buttons[i][0], _buttons[i][1], _buttons[i][2], _buttons[i][3], _buttons[i][4]);
+				var button:MyButton = new MyButton(_buttons[i][0], _buttons[i][1], _buttons[i][2], _buttons[i][3], _buttons[i][4], _buttons[i][5]);
+				
 				addChild(button);
 				button.addEventListener(MouseEvent.CLICK, _buttons[i][5]);
+				_output.addEventListener(TextEvent.TEXT_INPUT)
 			}
 		}
 		
@@ -78,8 +92,8 @@ package {
 					case "/": value /= Number(_actions[i+1]); break;
 				}
 			}
-			_actions = ["0"];
-			_output.text = String(Number(value.toFixed(10)));
+			_actions[_actions.length - 1] = _output.text;
+			_output.text = String(Number(value.toFixed(2)));
 		}
 		
 		public function clear(e:MouseEvent):void {
@@ -87,32 +101,23 @@ package {
 			_output.text = "0";
 		}
 		
-	}
-}
-
-import flash.display.Sprite;
-import flash.text.TextField;
-import flash.text.TextFormat;
-
-class MyButton extends Sprite {
-	
-	public var _button:Sprite = new Sprite();
-	public var _label:TextField = new TextField();
-	
-	public function MyButton($label:String, $x:Number, $y:Number, $width:Number, $height:Number) {
-		_button.graphics.lineStyle(1);
-		_button.graphics.beginFill(0xffffff);
-		_button.graphics.drawRoundRect(0, 0, $width, $height, 5);
-		_button.graphics.endFill();
-		_button.buttonMode = true;
-		_button.x = $x; _button.y = $y;
-		_button.name = _label.text = $label;
-		_label.x = $width/2 - 10; _label.y = $height/2 - 10;
-		_label.width = 20; _label.height = 20;
-		_label.selectable = _label.mouseEnabled = false;
-		_label.setTextFormat(new TextFormat("_sans", 15, 0x000000, true, null, null, null, null, "center"));
+		public function flip(e:MouseEvent):void {		
+			if (_output.text.substr(0, 1) != "0" || _output.text.indexOf(".") > -1){
+				if(_output.text.substr(0, 1) == "-") {
+					_actions[_actions.length - 1] = _output.text = _output.text.substr(1, _output.text.length)
+				} else {
+					_actions[_actions.length - 1] = _output.text = "-" + _output.text
+				}
+			} else return; 
+		}
 		
-		_button.addChild(_label);
-		addChild(_button);
+		public function undo(e:MouseEvent):void {						
+			_output.text = _output.text.substr(0, _output.text.length - 1);
+				if (_output.text.length == 0 || _output.text == "-") {
+					_output.text = "0";
+				}
+			_actions[_actions.length - 1] = _output.text;
+		}
+		
 	}
 }
