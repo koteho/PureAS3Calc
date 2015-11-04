@@ -12,30 +12,30 @@ package
 	public class MyButton extends Sprite
 	{		
 	
-		public var _button:Sprite = new Sprite();
-		public var _label:TextField = new TextField();
+		public var button:Sprite = new Sprite();
+		public var label:TextField = new TextField();
 		
-		public function MyButton($label:String, $x:Number, $y:Number, $width:Number, $height:Number, $type:String) 
+		public function MyButton($label:String, $x:Number, $y:Number, $width:Number, $height:Number, $typme:String) 
 		{
-			_button.graphics.lineStyle(1);
+			button.graphics.lineStyle(1);
 			//just for fun, lets make it looks better
-			if ($label.indexOf("C") > -1) _button.graphics.beginFill(0xDF7401); 
-			else if ($label.indexOf("=") > -1) _button.graphics.beginFill(0x5882FA); 
-			else   _button.graphics.beginFill(0x424242); 
+			if ($label.indexOf("C") > -1) button.graphics.beginFill(0xDF7401); 
+			else if ($label.indexOf("=") > -1) button.graphics.beginFill(0x5882FA); 
+			else   button.graphics.beginFill(0x424242); 
 			
-			_button.graphics.drawRoundRect(0, 0, $width, $height, 5);			
-			_button.graphics.endFill();
-			_button.buttonMode = true;
-			_button.x = $x; _button.y = $y;
-			_button.name = _label.text = $label;
-			_label.x = $width/2 - 10; _label.y = $height/2 - 10;
-			_label.width = 20; _label.height = 20;
-			_label.selectable = _label.mouseEnabled = false;
-			_label.backgroundColor = 0x000000;
-			_label.setTextFormat(new TextFormat("_sans", 15, 0xffffff, true, null, null, null, null, "center"));
+			button.graphics.drawRoundRect(0, 0, $width, $height, 5);			
+			button.graphics.endFill();
+			button.buttonMode = true;
+			button.x = $x; button.y = $y;
+			button.name = label.text = $label;
+			label.x = $width/2 - 10; label.y = $height/2 - 10;
+			label.width = 20; label.height = 20;
+			label.selectable = label.mouseEnabled = false;
+			label.backgroundColor = 0x000000;
+			label.setTextFormat(new TextFormat("_sans", 15, 0xffffff, true, null, null, null, null, "center"));
 			
-			_button.addChild(_label);
-			addChild(_button);
+			button.addChild(label);
+			addChild(button);
 		}
 		
 	}

@@ -18,8 +18,8 @@ package {
 	
 	public class Main extends Sprite {
 		
-		public var _output:TextField = new TextField();
-		public var _actions:Array = ["0"];
+		public var output:TextField = new TextField();
+		public var actions:Array = ["0"];
 		public var _buttons:Array = [
 										//value, x, y, width, height, type
 										["C", 5, 50, 50, 30, clear],
@@ -45,18 +45,18 @@ package {
 		
 		public function Main() {stage ? init() : addEventListener(Event.ADDED_TO_STAGE, init);}
 		
-		public function init(e:Event = null):void 
+		public function init(me:Event = null):void 
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
-			_output.x = 5; _output.y = 5;
-			_output.width = 215; _output.height = 28;
-			_output.border = true;
-			_output.selectable = false;
-			_output.defaultTextFormat = new TextFormat("_sans", 20, 0xffffff, true, null, null, null, null, "right");
+			output.x = 5; output.y = 5;
+			output.width = 215; output.height = 28;
+			output.border = true;
+			output.selectable = false;
+			output.defaultTextFormat = new TextFormat("_sans", 20, 0xffffff, true, null, null, null, null, "right");
 			// bg colour is not working =( 
-			_output.backgroundColor = 0x111111;
-			_output.text = "0";
-			addChild(_output);
+			output.backgroundColor = 0x111111;
+			output.text = "0";
+			addChild(output);
 			
 			var i:int = _buttons.length;
 			while (i--) {
@@ -69,100 +69,102 @@ package {
 		
 		public function checkRange():void 
 		{
-			var ind:int = _output.text.indexOf (".");
-			var sign:int = _output.text.indexOf ("-");	
+			var ind:int = output.text.indexOf (".");
+			var sign:int = output.text.indexOf ("-");	
 				if ( ind > -1 ) {
-					var decimal:String = _output.text.substring (ind+1);
+					var decimal:String = output.text.substring (ind+1);
 					if (decimal.indexOf (".") > -1) {
-						_actions[_actions.length - 1] = _output.text = _output.text.substring (0, ind + 1 + decimal.indexOf("."));
+						actions[actions.length - 1] = output.text = output.text.substring (0, ind + 1 + decimal.indexOf("."));
 					}
 					if (decimal.length > 2) {
-						_actions[_actions.length - 1] = _output.text = _output.text.substring (0, ind + 3);
+						actions[actions.length - 1] = output.text = output.text.substring (0, ind + 3);
 					}
 				}else if (ind == -1 ) {
 					if(sign == -1)
-						_actions[_actions.length - 1] = _output.text = _output.text.substring (0, 4);
-					else _actions[_actions.length - 1] = _output.text = _output.text.substring (0, 5);
+						actions[actions.length - 1] = output.text = output.text.substring (0, 4);
+					else actions[actions.length - 1] = output.text = output.text.substring (0, 5);
 				}
 				
 		}
 		public function truncate ():void 
 		{
 			var error:String = "check";
-			_output.text = _actions[_actions.length - 1]; 
-			if (Number(_output.text) >= 10000 || Number(_output.text) <= -10000 ){
-				_actions[_actions.length - 1] = _output.text = error;
+			output.text = actions[actions.length - 1]; 
+			if (Number(output.text) >= 10000 || Number(output.text) <= -10000 ){
+				actions[actions.length - 1] = output.text = error;
 			}
 				
 		}
 		
-		public function digit(e:MouseEvent):void 
+		public function digit(me:MouseEvent):void 
 		{
-			if (isNaN(_actions[_actions.length - 1])) _actions.push("0");
-			var value:String = e.target.name;
-			var number:String = _actions[_actions.length - 1];
+			if (isNaN(actions[actions.length - 1])) actions.push("0");
+			var value:String = me.target.name;
+			var number:String = actions[actions.length - 1];
 			if (value != ".") number = (number == "0") ? value : number + value;
 			else if (number.indexOf(".") == -1) number += ".";
-			_output.text = _actions[_actions.length - 1] = number;
+			output.text = actions[actions.length - 1] = number;
 			checkRange()
 		}
 		
-		public function operation(e:MouseEvent):void 
+		public function operation(me:MouseEvent):void 
 		{
-			if (_actions.length == 1) _actions[0] = _output.text;
-			isNaN(_actions[_actions.length - 1]) ? _actions[_actions.length - 1] = e.target.name : _actions.push(e.target.name);
+			if (actions.length == 1) actions[0] = output.text;
+			isNaN(actions[actions.length - 1]) ? actions[actions.length - 1] = me.target.name : actions.push(me.target.name);
 		}
 		
-		public function result(e:MouseEvent):void 
+		public function result(me:MouseEvent):void 
 		{
-			if (_actions.length < 3) return;
-			var value:Number = Number(_actions[0]);
-			for (var i:int = 1; i<_actions.length-1; i+=2) {
-				switch (_actions[i]) {
-					case "+": value += Number(_actions[i+1]); break;
-					case "-": value -= Number(_actions[i+1]); break;
-					case "*": value *= Number(_actions[i+1]); break;
-					case "/": value /= Number(_actions[i+1]); break;
+			if (actions.length < 3) return;
+			var value:Number = Number(actions[0]);
+			for (var i:int = 1; i < actions.length - 1; i += 2) {
+				//to show last rezult
+				//_output.text = String(Number(value.toFixed(2)));
+				switch (actions[i]) {
+					case "+": value += Number(actions[i+1]); break;
+					case "-": value -= Number(actions[i+1]); break;
+					case "*": value *= Number(actions[i+1]); break;
+					case "/": value /= Number(actions[i+1]); break;
 				}
 			}
 			if (value <= -10000 || value >= 10000) {
-				_actions = ["0"];	
-				_output.text = "Error";  				
+				actions = ["0"];	
+				output.text = "Error";  				
 			} else if (!isNaN(value) && isFinite(value)) {
-				_actions = ["0"]; 
-				_output.text = String(Number(value.toFixed(2)));				
+				actions = ["0"]; 
+				output.text = String(Number(value.toFixed(2)));				
 			} else {
 				
-				_actions = ["0"];
-				_output.text = "WoW what is that?";  
+				actions = ["0"];
+				output.text = "WoW what is that?";  
 									
 			}
 		}
 		
-		public function clear(e:MouseEvent):void 
+		public function clear(me:MouseEvent):void 
 		{
-			_actions = ["0"];
-			_output.text = "0";
+			actions = ["0"];
+			output.text = "0";
 		}
 		
-		public function flip(e:MouseEvent):void 
+		public function flip(me:MouseEvent):void 
 		{		
-			if (_output.text.substr(0, 1) != "0" || _output.text.indexOf(".") > -1){
-				if(_output.text.substr(0, 1) == "-") {
-					_actions[_actions.length - 1] = _output.text = _output.text.substr(1, _output.text.length)
+			if (output.text.substr(0, 1) != "0" || output.text.indexOf(".") > -1){
+				if(output.text.substr(0, 1) == "-") {
+					actions[actions.length - 1] = output.text = output.text.substr(1, output.text.length)
 				} else {
-					_actions[_actions.length - 1] = _output.text = "-" + _output.text
+					actions[actions.length - 1] = output.text = "-" + output.text
 				}
 			} else return; 
 		}
 		
-		public function undo(e:MouseEvent):void 
+		public function undo(me:MouseEvent):void 
 		{						
-			_output.text = _output.text.substr(0, _output.text.length - 1);
-				if (_output.text.length == 0 || _output.text == "-") {
-					_output.text = "0";
+			output.text = output.text.substr(0, output.text.length - 1);
+				if (output.text.length == 0 || output.text == "-") {
+					output.text = "0";
 				}
-			_actions[_actions.length - 1] = _output.text;
+			actions[actions.length - 1] = output.text;
 		}
 		
 	}
