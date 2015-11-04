@@ -8,7 +8,7 @@ Version 0.2
 Develop with:
   ActionScropt 3.0
   Flex 4.6.0.0, Air 3.1
-  FlashDevelop IDE 4.5  
+  FlashDevelop IDE 5.0.2  
   
 Calculatorperforms basic arithmetic: Addition, Subtraction, Multiplication, and Division.
 
