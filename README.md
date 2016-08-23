@@ -4,7 +4,7 @@ Version 0.2
 
 11/03/2015
 
-@author Pavlo K
+@author [Pavlo K](https://github.com/koteho)
 	 
 Develop with:
   ActionScropt 3.0
