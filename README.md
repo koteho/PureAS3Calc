@@ -1,9 +1,10 @@
-Calculator
+#Calculator 
+
 Version 0.2
-/**
- * 11/03/2015
- * @author Pavlo K
- */
+
+11/03/2015
+
+@author Pavlo K
 	 
 Develop with:
   ActionScropt 3.0
@@ -13,6 +14,7 @@ Develop with:
 Calculatorperforms basic arithmetic: Addition, Subtraction, Multiplication, and Division.
 
 Requirements:
+
 1. The calculator only accepts numbers in the range of -9999.99 to 9999.99
 2. Internal calculations should truncate extra decimal digits after the second decimal digit
 3. Internal calculations should throw an error when the calculated number is out of range, and display it on the screen
